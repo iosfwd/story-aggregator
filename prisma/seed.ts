@@ -11,11 +11,12 @@ const prisma = new PrismaClient({
 });
 
 const postData: Prisma.PostCreateInput[] = [
-  { title: "Hello world", },
+  { title: "Hello world" },
+  { title: "Goodbye world" },
 ];
 
-
 export async function main() {
+  await prisma.post.deleteMany({});
   for (const p of postData) {
     await prisma.post.create({ data: p });
   }
