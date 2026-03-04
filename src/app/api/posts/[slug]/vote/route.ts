@@ -15,7 +15,10 @@ export async function POST(
     const body = await request.json();
 
     if (typeof !body?.value !== "number") {
-      return Response.json({ error: "Invalid or missing value" }, { status: 400 });
+      return Response.json(
+        { error: "Invalid or missing value" },
+        { status: 400 },
+      );
     }
 
     const value = body.value;
