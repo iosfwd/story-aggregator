@@ -14,8 +14,8 @@ export async function POST(
 
     const body = await request.json();
 
-    if (!body?.value) {
-      return Response.json({ error: "Value missing" }, { status: 400 });
+    if (typeof !body?.value !== "number") {
+      return Response.json({ error: "Invalid or missing value" }, { status: 400 });
     }
 
     const value = body.value;
@@ -35,7 +35,7 @@ export async function POST(
 
     return Response.json(updatePost, { status: 200 });
   } catch (error) {
-    console.error("POST /api/posts/[id]/upvote failed:", error);
+    console.error("POST /api/posts/[id]/vote failed:", error);
 
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
