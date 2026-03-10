@@ -6,9 +6,7 @@ export default async function Home() {
     orderBy: [{ score: "desc" }, { createdAt: "desc" }],
     take: 30,
     include: {
-      author: {
-        select: { username: true },
-      },
+      author: true,
       _count: {
         select: {
           comments: true,
