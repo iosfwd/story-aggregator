@@ -12,6 +12,7 @@ export default async function Page({
     where: { id: parseInt(id) },
     include: {
       author: true,
+      comments: { include: { author: true } },
     },
   });
 
@@ -19,5 +20,19 @@ export default async function Page({
     notFound();
   }
 
-  return <div>{story.title} {story.author.username}</div>;
+  return (
+    <div>
+      <div>
+	{story.title} {story.author.username}
+      </div>
+      <div>
+	{story.comments.map((comment) => (
+	  <div key={comment.id}>
+	    <div>{comment.author.username}</div>
+	    <div>{comment.content}</div>
+	  </div>
+	))}
+      </div>
+    </div>
+  );
 }
