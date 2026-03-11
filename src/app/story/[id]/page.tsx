@@ -4,12 +4,12 @@ import { notFound } from "next/navigation";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { slug } = await params;
+  const { id } = await params;
 
   const story = await prisma.story.findUnique({
-    where: { id: parseInt(slug) },
+    where: { id: parseInt(id) },
     include: {
       author: true,
     },
