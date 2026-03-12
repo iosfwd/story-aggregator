@@ -1,5 +1,30 @@
+import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Comments from "@/components/comments";
+
+type CommentWithAuthor = Prisma.CommentGetPayload<{
+  include: { author: true };
+}>;
+
+function buildCommentTree(comments: CommentWithAuthor[]) {
+  const map = new Map();
+  const topLevelComments = [];
+
+  for (const comment of comments) {
+    map.set(comment.id, { ...comment, children: [] });
+  }
+
+  for (const comment of comments) {
+    if (comment.parentId === null) {
+      topLevelComments.push(map.get(comment.id));
+    } else {
+      map.get(comment.parentId)?.children.push(map.get(comment.id));
+    }
+  }
+
+  return topLevelComments;
+}
 
 export default async function Page({
   params,
@@ -12,7 +37,7 @@ export default async function Page({
     where: { id: parseInt(id) },
     include: {
       author: true,
-      comments: { include: { author: true } },
+      comments: { include: { author: true }, orderBy: { createdAt: "asc" } },
     },
   });
 
@@ -20,19 +45,14 @@ export default async function Page({
     notFound();
   }
 
+  const commentTree = buildCommentTree(story.comments);
+
   return (
     <div>
       <div>
-	{story.title} {story.author.username}
+        {story.title} {story.author.username}
       </div>
-      <div>
-	{story.comments.map((comment) => (
-	  <div key={comment.id}>
-	    <div>{comment.author.username}</div>
-	    <div>{comment.content}</div>
-	  </div>
-	))}
-      </div>
+      <Comments comments={commentTree} />
     </div>
   );
 }
