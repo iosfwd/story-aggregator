@@ -40,7 +40,7 @@ model Vote {
   createdAt DateTime @default(now())
 
   userId    Int
-  storyId    Int
+  storyId   Int
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
@@ -55,7 +55,7 @@ model Comment {
   createdAt DateTime  @default(now())
 
   authorId  Int
-  storyId    Int
+  storyId   Int
   parentId  Int?
 
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
