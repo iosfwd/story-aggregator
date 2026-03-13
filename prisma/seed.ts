@@ -34,7 +34,6 @@ async function main() {
 
   const story1 = await prisma.story.create({
     data: {
-      slug: "prisma-orm",
       title: "Prisma ORM Overview",
       url: "https://www.prisma.io",
       authorId: alice.id,
@@ -44,7 +43,6 @@ async function main() {
 
   const story2 = await prisma.story.create({
     data: {
-      slug: "nextjs-docs",
       title: "Next.js Documentation",
       url: "https://nextjs.org/docs",
       authorId: bob.id,

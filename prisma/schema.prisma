@@ -19,7 +19,6 @@ model User {
 
 model Story {
   id        Int       @id @default(autoincrement())
-  slug      String    @unique
   title     String
   url       String
   score     Int       @default(0)

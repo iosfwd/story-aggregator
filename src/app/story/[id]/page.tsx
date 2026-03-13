@@ -2,6 +2,7 @@ import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Comments from "@/components/comments";
+import CommentForm from "@/components/comment-form";
 
 type CommentWithAuthor = Prisma.CommentGetPayload<{
   include: { author: true };
@@ -52,6 +53,9 @@ export default async function Page({
       <div>
         {story.title} {story.author.username}
       </div>
+
+      <CommentForm storyId={parseInt(id)} parentId={null} />
+
       <Comments comments={commentTree} />
     </div>
   );
