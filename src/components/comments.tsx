@@ -1,6 +1,19 @@
+import { Prisma } from "@/app/generated/prisma/client";
 import Comment from "@/components/comment";
 
-export default function Comments({ comments }) {
+type CommentWithAuthor = Prisma.CommentGetPayload<{
+  include: { author: true };
+}>;
+
+type CommentItem = CommentWithAuthor & {
+  children: CommentItem[];
+};
+
+type Props = {
+  comments: CommentItem[];
+};
+
+export default function Comments({ comments }: Props) {
   return (
     <div>
       {comments.map((comment) => (

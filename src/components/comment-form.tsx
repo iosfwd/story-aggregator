@@ -1,13 +1,12 @@
 import Form from "next/form";
 import { createComment } from "@/app/story/actions";
 
-export default function CommentForm({
-  storyId,
-  parentId,
-}: {
+type Props = {
   storyId: number;
   parentId: number | null;
-}) {
+};
+
+export default function CommentForm({ storyId, parentId }: Props) {
   return (
     <Form action={createComment}>
       <input type="hidden" name="storyId" value={storyId} />
