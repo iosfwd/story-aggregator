@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Comments from "@/components/comments";
 import CommentForm from "@/components/comment-form";
+import VoteButtons from "@/components/vote-buttons";
 
 type CommentWithAuthor = Prisma.CommentGetPayload<{
   include: { author: true };
@@ -33,9 +34,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
+  const storyId = parseInt(id);
   const story = await prisma.story.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: storyId },
     include: {
       author: true,
       comments: { include: { author: true }, orderBy: { createdAt: "asc" } },
@@ -54,7 +55,9 @@ export default async function Page({
         {story.title} {story.author.username}
       </div>
 
-      <CommentForm storyId={parseInt(id)} parentId={null} />
+      <VoteButtons storyId={storyId} />
+
+      <CommentForm storyId={storyId} parentId={null} />
 
       <Comments comments={commentTree} />
     </div>

@@ -20,8 +20,22 @@ export async function createComment(formData: FormData) {
   });
 
   await prisma.comment.create({
-    data: { ...data, authorId: 9 },
+    data: { ...data, authorId: 1 },
   });
 
   revalidatePath(`/story/${data.storyId}`);
+}
+
+export async function upsertVote(storyId: number, value: 1 | -1) {
+  await prisma.story.update({
+    where: {
+      id: storyId,
+    },
+    data: {
+      score: { increment: value },
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath(`/story/${storyId}`);
 }

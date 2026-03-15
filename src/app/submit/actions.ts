@@ -17,7 +17,7 @@ export async function createStory(formData: FormData) {
   });
 
   await prisma.story.create({
-    data: { ...data, authorId: 9 },
+    data: { ...data, authorId: 1 },
   });
 
   revalidatePath("/");

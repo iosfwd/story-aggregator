@@ -18,10 +18,10 @@ async function main() {
 
   await prisma.user.createMany({
     data: [
-      { username: "alice" },
-      { username: "bob" },
-      { username: "charlie" },
-      { username: "diana" },
+      { username: "alice", passwordHash: "dummy" },
+      { username: "bob", passwordHash: "dummy" },
+      { username: "charlie", passwordHash: "dummy" },
+      { username: "diana", passwordHash: "dummy" },
     ],
   });
 
