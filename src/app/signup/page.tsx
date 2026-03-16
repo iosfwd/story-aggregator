@@ -1,9 +1,9 @@
 import SignupForm from "@/components/signup-form";
 
 export default async function Page() {
-  return(
+  return (
     <div>
       <SignupForm />
     </div>
-  )
+  );
 }
