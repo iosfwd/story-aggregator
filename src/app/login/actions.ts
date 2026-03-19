@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import { createSession } from "@/lib/session";
 
 const loginSchema = z.object({
   username: z.string(),
@@ -31,6 +32,8 @@ export async function loginUser(formData: FormData) {
   if (!valid) {
     throw new Error("Password does not match");
   }
+
+  createSession(String(user.id));
 
   redirect("/");
 }
