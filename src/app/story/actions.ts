@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { verifySession } from "@/lib/session";
 
 const commentSchema = z.object({
   storyId: z.number(),
@@ -11,6 +12,8 @@ const commentSchema = z.object({
 });
 
 export async function createComment(formData: FormData) {
+  const session = await verifySession();
+
   const data = commentSchema.parse({
     storyId: Number(formData.get("storyId")),
     parentId: formData.get("parentId")
@@ -20,13 +23,15 @@ export async function createComment(formData: FormData) {
   });
 
   await prisma.comment.create({
-    data: { ...data, authorId: 1 },
+    data: { ...data, authorId: Number(session.userId) },
   });
 
   revalidatePath(`/story/${data.storyId}`);
 }
 
 export async function upsertVote(storyId: number, value: 1 | -1) {
+  const session = await verifySession();
+
   await prisma.story.update({
     where: {
       id: storyId,
