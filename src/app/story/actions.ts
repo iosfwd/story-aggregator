@@ -31,14 +31,34 @@ export async function createComment(formData: FormData) {
 
 export async function upsertVote(storyId: number, value: 1 | -1) {
   const session = await verifySession();
+  const userId = Number(session.userId);
 
-  await prisma.story.update({
-    where: {
-      id: storyId,
-    },
-    data: {
-      score: { increment: value },
-    },
+  await prisma.$transaction(async (tx) => {
+    const vote = await tx.vote.findUnique({
+      where: { userId_storyId: { userId, storyId } },
+    });
+
+    if (vote?.value === value) {
+      await tx.vote.delete({
+        where: { userId_storyId: { userId, storyId } },
+      });
+    } else {
+      await tx.vote.upsert({
+        where: { userId_storyId: { userId, storyId } },
+        create: { userId, storyId, value },
+        update: { value },
+      });
+    }
+
+    const { _sum } = await tx.vote.aggregate({
+      where: { storyId },
+      _sum: { value: true },
+    });
+
+    await tx.story.update({
+      where: { id: storyId },
+      data: { score: _sum.value ?? 0 },
+    });
   });
 
   revalidatePath("/");
