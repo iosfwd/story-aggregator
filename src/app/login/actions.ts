@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { createSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 
 const loginSchema = z.object({
   username: z.string(),
@@ -35,5 +35,10 @@ export async function loginUser(formData: FormData) {
 
   createSession(String(user.id));
 
+  redirect("/");
+}
+
+export async function logoutUser() {
+  await deleteSession();
   redirect("/");
 }
