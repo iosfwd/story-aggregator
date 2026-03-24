@@ -11,9 +11,9 @@ export default async function Header() {
 	<Link href="/">Home</Link>
 	<span className="text-black/40"> | </span>
 	<Link href="/submit">Submit</Link>
-	<span className="text-black/40"> | </span>
+	{!session && <span className="text-black/40"> | </span>}
 	{!session && <Link href={"/login"}>Login</Link>}
-	<span className="text-black/40"> | </span>
+	{!session && <span className="text-black/40"> | </span>}
 	{!session && <Link href={"/signup"}>Sign up</Link>}
 	<span className="text-black/40"> | </span>
 	{session && <button onClick={logoutButton}>Logout</button>}

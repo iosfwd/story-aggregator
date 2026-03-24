@@ -33,7 +33,7 @@ export async function loginUser(formData: FormData) {
     throw new Error("Password does not match");
   }
 
-  createSession(String(user.id));
+  await createSession(String(user.id));
 
   redirect("/");
 }
