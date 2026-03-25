@@ -1,5 +1,6 @@
 import { Prisma } from "@/app/generated/prisma/client";
 import Link from "next/link";
+import { timeAgo } from "@/lib/utils";
 
 type StoryWithMeta = Prisma.StoryGetPayload<{
   include: {
@@ -11,26 +12,6 @@ type StoryWithMeta = Prisma.StoryGetPayload<{
 type Props = {
   story: StoryWithMeta;
 };
-
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (seconds < 60) {
-    return `${seconds}s`;
-  }
-
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) {
-    return `${minutes}m`;
-  }
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours}h`;
-  }
-
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
-}
 
 export default function Story({ story }: Props) {
   return (
