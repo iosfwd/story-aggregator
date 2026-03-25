@@ -5,19 +5,36 @@ type CommentWithAuthor = Prisma.CommentGetPayload<{
   include: { author: true };
 }>;
 
-type CommentItem = CommentWithAuthor & {
-  children: CommentItem[];
+type Props = {
+  comments: CommentWithAuthor[];
 };
 
-type Props = {
-  comments: CommentItem[];
-};
+function buildCommentTree(comments: CommentWithAuthor[]) {
+  const map = new Map();
+  const topLevelComments = [];
+
+  for (const comment of comments) {
+    map.set(comment.id, { ...comment, children: [] });
+  }
+
+  for (const comment of comments) {
+    if (comment.parentId === null) {
+      topLevelComments.push(map.get(comment.id));
+    } else {
+      map.get(comment.parentId)?.children.push(map.get(comment.id));
+    }
+  }
+
+  return topLevelComments;
+}
 
 export default function Comments({ comments }: Props) {
+  const commentTree = buildCommentTree(comments);
+
   return (
     <div>
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} depth={0} />
+      {commentTree.map((comment) => (
+	<Comment key={comment.id} comment={comment} depth={0} />
       ))}
     </div>
   );

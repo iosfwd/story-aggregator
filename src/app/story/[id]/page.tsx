@@ -5,29 +5,6 @@ import Comments from "@/components/comments";
 import CommentForm from "@/components/comment-form";
 import VoteButtons from "@/components/vote-buttons";
 
-type CommentWithAuthor = Prisma.CommentGetPayload<{
-  include: { author: true };
-}>;
-
-function buildCommentTree(comments: CommentWithAuthor[]) {
-  const map = new Map();
-  const topLevelComments = [];
-
-  for (const comment of comments) {
-    map.set(comment.id, { ...comment, children: [] });
-  }
-
-  for (const comment of comments) {
-    if (comment.parentId === null) {
-      topLevelComments.push(map.get(comment.id));
-    } else {
-      map.get(comment.parentId)?.children.push(map.get(comment.id));
-    }
-  }
-
-  return topLevelComments;
-}
-
 export default async function Page({
   params,
 }: {
@@ -47,19 +24,17 @@ export default async function Page({
     notFound();
   }
 
-  const commentTree = buildCommentTree(story.comments);
-
   return (
     <div>
       <div>
-        {story.title} {story.author.username}
+	{story.title} {story.author.username}
       </div>
 
       <VoteButtons storyId={storyId} />
 
       <CommentForm storyId={storyId} parentId={null} />
 
-      <Comments comments={commentTree} />
+      <Comments comments={story.comments} />
     </div>
   );
 }
