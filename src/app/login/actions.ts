@@ -7,30 +7,45 @@ import bcrypt from "bcrypt";
 import { createSession, deleteSession } from "@/lib/session";
 
 const loginSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+  username: z.string().min(1, "Username required"),
+  password: z.string().min(1, "Username required"),
 });
 
-export async function loginUser(formData: FormData) {
-  const data = loginSchema.parse({
+export type LoginFormState = {
+  errors?: {
+    username?: string[];
+    password?: string[];
+    form?: string[];
+  };
+} | null;
+
+export async function loginUser(
+  _prevState: LoginFormState,
+  formData: FormData,
+) {
+  const result = loginSchema.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),
   });
 
-  const { username, password } = data;
+  if (!result.success) {
+    return { errors: z.flattenError(result.error).fieldErrors };
+  }
+
+  const { username, password } = result.data;
 
   const user = await prisma.user.findUnique({
     where: { username },
   });
 
   if (!user) {
-    throw new Error("User does not exist");
+    return { errors: { form: ["Invalid username or password"] } };
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash);
 
   if (!valid) {
-    throw new Error("Password does not match");
+    return { errors: { form: ["Invalid username or password"] } };
   }
 
   await createSession(String(user.id));
