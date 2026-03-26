@@ -7,22 +7,36 @@ import { z } from "zod";
 import { verifySession } from "@/lib/session";
 
 const storySchema = z.object({
-  title: z.string().min(1).max(100),
-  url: z.url(),
+  title: z.string().min(1, "Title required").max(100, "Title too long"),
+  url: z.url("Invalid URL"),
 });
 
-export async function createStory(formData: FormData) {
+export type StoryFormState = {
+  errors?: {
+    title?: string[];
+    url?: string[];
+  };
+} | null;
+
+export async function createStory(
+  _prevState: StoryFormState,
+  formData: FormData,
+) {
   const session = await verifySession();
 
-  const data = storySchema.parse({
+  const result = storySchema.safeParse({
     title: String(formData.get("title") ?? ""),
     url: String(formData.get("url") ?? ""),
   });
 
-  await prisma.story.create({
-    data: { ...data, authorId: Number(session.userId) },
+  if (!result.success) {
+    return { errors: z.flattenError(result.error).fieldErrors };
+  }
+
+  const story = await prisma.story.create({
+    data: { ...result.data, authorId: Number(session.userId) },
   });
 
   revalidatePath("/");
-  redirect("/");
+  redirect(`/story/${story.id}`);
 }
