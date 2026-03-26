@@ -20,29 +20,29 @@ export default function Story({ story }: Props) {
       <VoteButtons storyId={story.id} score={story.score} />
 
       <div className="flex flex-col">
-	<div className="flex flex-row items-center gap-1">
-	  <a href={story.url} target="_blank" rel="noopener noreferrer">
-	    {story.title}
-	  </a>
-	  {story.url && (
-	    <span className="truncate font-mono text-xs text-stone-400">
-	      ({new URL(story.url).hostname.replace("www.", "")})
-	    </span>
-	  )}
-	</div>
+        <div className="flex flex-row items-center gap-1">
+          <a href={story.url} target="_blank" rel="noopener noreferrer">
+            {story.title}
+          </a>
+          {story.url && (
+            <span className="truncate font-mono text-xs text-stone-400">
+              ({new URL(story.url).hostname.replace("www.", "")})
+            </span>
+          )}
+        </div>
 
-	<div className="flex flex-row gap-1 font-mono text-xs text-stone-500">
-	  <span>
-	    submitted by {story.author.username} {timeAgo(story.createdAt)} ago
-	  </span>
-	  <span className="mx-0.5 text-stone-400">|</span>
-	  <div>
-	    <Link href={`/story/${story.id}`}>
-	      {story._count.comments}{" "}
-	      {story._count.comments === 1 ? "comment" : "comments"}
-	    </Link>
-	  </div>
-	</div>
+        <div className="flex flex-row gap-1 font-mono text-xs text-stone-500">
+          <span>
+            submitted by {story.author.username} {timeAgo(story.createdAt)} ago
+          </span>
+          <span className="mx-0.5 text-stone-400">|</span>
+          <div>
+            <Link href={`/story/${story.id}`}>
+              {story._count.comments}{" "}
+              {story._count.comments === 1 ? "comment" : "comments"}
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
