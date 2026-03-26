@@ -14,13 +14,32 @@ const signupSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-export async function createUser(formData: FormData) {
-  const data = signupSchema.parse({
+export type SignupFormState = {
+  errors?: {
+    username?: string[];
+    password?: string[];
+  };
+} | null;
+
+export async function createUser(
+  _prevState: SignupFormState,
+  formData: FormData,
+) {
+  const result = signupSchema.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),
   });
 
-  const { username, password } = data;
+  if (!result.success) {
+    return { errors: z.flattenError(result.error).fieldErrors };
+  }
+
+  const { username, password } = result.data;
+
+  const existing = await prisma.user.findUnique({ where: { username } });
+  if (existing) {
+    return { errors: { username: ["Username taken"] } };
+  }
 
   const passwordHash = await bcrypt.hash(password, 10);
 
@@ -31,5 +50,5 @@ export async function createUser(formData: FormData) {
     },
   });
 
-  redirect("/");
+  redirect("/login");
 }
