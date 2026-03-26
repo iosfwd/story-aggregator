@@ -1,10 +1,13 @@
 "use client";
 
-import { createStory } from "@/app/submit/actions";
+import { createStory, StoryFormState } from "@/app/submit/actions";
 import { useActionState } from "react";
 
 export default function SubmitForm() {
-  const [state, action, pending] = useActionState(createStory, null);
+  const [state, action, pending] = useActionState<StoryFormState, FormData>(
+    createStory,
+    null,
+  );
 
   return (
     <div className="mx-auto max-w-sm">

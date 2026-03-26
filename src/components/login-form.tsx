@@ -1,10 +1,13 @@
 "use client";
 
-import { loginUser } from "@/app/login/actions";
+import { loginUser, LoginFormState } from "@/app/login/actions";
 import { useActionState } from "react";
 
 export default function LoginForm() {
-  const [state, action, pending] = useActionState(loginUser, null);
+  const [state, action, pending] = useActionState<LoginFormState, FormData>(
+    loginUser,
+    null,
+  );
 
   return (
     <div className="mx-auto max-w-sm">
