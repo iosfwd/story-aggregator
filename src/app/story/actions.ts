@@ -8,13 +8,22 @@ import { verifySession } from "@/lib/session";
 const commentSchema = z.object({
   storyId: z.number(),
   parentId: z.number().nullable(),
-  content: z.string().min(1).max(5000),
+  content: z.string().min(1, "Comment is empty").max(5000, "Comment too long"),
 });
 
-export async function createComment(formData: FormData) {
+export type CommentFormState = {
+  errors?: {
+    content?: string[];
+  };
+} | null;
+
+export async function createComment(
+  _prevState: CommentFormState,
+  formData: FormData,
+) {
   const session = await verifySession();
 
-  const data = commentSchema.parse({
+  const result = commentSchema.safeParse({
     storyId: Number(formData.get("storyId")),
     parentId: formData.get("parentId")
       ? Number(formData.get("parentId"))
@@ -22,11 +31,16 @@ export async function createComment(formData: FormData) {
     content: String(formData.get("content") ?? ""),
   });
 
+  if (!result.success) {
+    return { errors: z.flattenError(result.error).fieldErrors };
+  }
+
   await prisma.comment.create({
-    data: { ...data, authorId: Number(session.userId) },
+    data: { ...result.data, authorId: Number(session.userId) },
   });
 
-  revalidatePath(`/story/${data.storyId}`);
+  revalidatePath(`/story/${result.data.storyId}`);
+  return null;
 }
 
 export async function upsertVote(storyId: number, value: 1 | -1) {
@@ -40,13 +54,13 @@ export async function upsertVote(storyId: number, value: 1 | -1) {
 
     if (vote?.value === value) {
       await tx.vote.delete({
-        where: { userId_storyId: { userId, storyId } },
+	where: { userId_storyId: { userId, storyId } },
       });
     } else {
       await tx.vote.upsert({
-        where: { userId_storyId: { userId, storyId } },
-        create: { userId, storyId, value },
-        update: { value },
+	where: { userId_storyId: { userId, storyId } },
+	create: { userId, storyId, value },
+	update: { value },
       });
     }
 
