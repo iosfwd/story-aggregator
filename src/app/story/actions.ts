@@ -54,13 +54,13 @@ export async function upsertVote(storyId: number, value: 1 | -1) {
 
     if (vote?.value === value) {
       await tx.vote.delete({
-	where: { userId_storyId: { userId, storyId } },
+        where: { userId_storyId: { userId, storyId } },
       });
     } else {
       await tx.vote.upsert({
-	where: { userId_storyId: { userId, storyId } },
-	create: { userId, storyId, value },
-	update: { value },
+        where: { userId_storyId: { userId, storyId } },
+        create: { userId, storyId, value },
+        update: { value },
       });
     }
 
