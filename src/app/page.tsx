@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Stories from "@/components/stories";
 import Link from "next/link";
 
-export default async function Home({
+export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
@@ -27,13 +27,13 @@ export default async function Home({
 
   const storyCount = await prisma.story.count();
 
-  const totalPages = Math.ceil(storyCount / 30);
+  const pageCount = Math.ceil(storyCount / 30);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
       <Stories stories={stories} />
 
-      {totalPages > 1 && (
+      {pageCount > 1 && (
 	<div className="relative mt-6 flex items-center justify-center gap-4 font-mono text-sm text-stone-500">
 	  {currentPage > 1 && (
 	    <Link
@@ -44,10 +44,10 @@ export default async function Home({
 	    </Link>
 	  )}
 	  <span>
-	    page {currentPage} of {totalPages}
+	    page {currentPage} of {pageCount}
 	  </span>
 
-	  {currentPage < totalPages && (
+	  {currentPage < pageCount && (
 	    <Link
 	      href={`/?page=${currentPage + 1}`}
 	      className="absolute right-0 transition-colors hover:text-pink-500"
