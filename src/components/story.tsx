@@ -33,7 +33,11 @@ export default function Story({ story }: Props) {
 
         <div className="flex flex-row gap-1 font-mono text-xs text-stone-500">
           <span>
-            submitted by {story.author.username} {timeAgo(story.createdAt)} ago
+            submitted by{" "}
+            <Link href={`/user/${story.author.username}`}>
+              {story.author.username}
+            </Link>{" "}
+            {timeAgo(story.createdAt)} ago
           </span>
           <span className="mx-0.5 text-stone-400">|</span>
           <div>
