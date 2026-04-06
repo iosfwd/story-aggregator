@@ -4,6 +4,7 @@ import Comments from "@/components/comments";
 import CommentForm from "@/components/comment-form";
 import VoteButtons from "@/components/vote-buttons";
 import { timeAgo } from "@/lib/utils";
+import Link from "next/link";
 
 export default async function Page({
   params,
@@ -27,33 +28,36 @@ export default async function Page({
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
       <div className="mb-6 flex items-start gap-3">
-	<VoteButtons storyId={storyId} score={story.score} />
+        <VoteButtons storyId={storyId} score={story.score} />
 
-	<div className="flex min-w-0 flex-col gap-0.5">
-	  <div className="flex flex-row items-baseline gap-1.5">
-	    <a href={story.url} target="_blank" rel="noopener noreferrer">
-	      {story.title}
-	    </a>
-	    {story.url && (
-	      <span className="truncate font-mono text-xs text-stone-400">
-		({new URL(story.url).hostname.replace("www.", "")})
-	      </span>
-	    )}
-	  </div>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <div className="flex flex-row items-baseline gap-1.5">
+            <a href={story.url} target="_blank" rel="noopener noreferrer">
+              {story.title}
+            </a>
+            {story.url && (
+              <span className="truncate font-mono text-xs text-stone-400">
+                ({new URL(story.url).hostname.replace("www.", "")})
+              </span>
+            )}
+          </div>
 
-	  <div className="flex flex-row gap-1 font-mono text-xs text-stone-500">
-	    <span>
-	      submitted by {story.author.username} {timeAgo(story.createdAt)}{" "}
-	      ago
-	    </span>
-	  </div>
-	</div>
+          <div className="flex flex-row gap-1 font-mono text-xs text-stone-500">
+            <span>
+              submitted by{" "}
+              <Link href={`/user/${story.author.username}`}>
+                {story.author.username}
+              </Link>{" "}
+              {timeAgo(story.createdAt)} ago
+            </span>
+          </div>
+        </div>
       </div>
 
       <hr className="mb-6 border-stone-200" />
 
       <div className="mb-8">
-	<CommentForm storyId={storyId} parentId={null} />
+        <CommentForm storyId={storyId} parentId={null} />
       </div>
 
       <Comments comments={story.comments} />

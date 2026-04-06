@@ -18,9 +18,9 @@ export default async function Page({
     include: {
       author: true,
       _count: {
-	select: {
-	  comments: true,
-	},
+        select: {
+          comments: true,
+        },
       },
     },
   });
@@ -34,28 +34,28 @@ export default async function Page({
       <Stories stories={stories} />
 
       {pageCount > 1 && (
-	<div className="relative mt-6 flex items-center justify-center gap-4 font-mono text-sm text-stone-500">
-	  {currentPage > 1 && (
-	    <Link
-	      href={`/?page=${currentPage - 1}`}
-	      className="absolute left-0 transition-colors hover:text-pink-500"
-	    >
-	      ← prev
-	    </Link>
-	  )}
-	  <span>
-	    page {currentPage} of {pageCount}
-	  </span>
+        <div className="relative mt-6 flex items-center justify-center gap-4 font-mono text-sm text-stone-500">
+          {currentPage > 1 && (
+            <Link
+              href={`/?page=${currentPage - 1}`}
+              className="absolute left-0 transition-colors hover:text-pink-500"
+            >
+              ← prev
+            </Link>
+          )}
+          <span>
+            page {currentPage} of {pageCount}
+          </span>
 
-	  {currentPage < pageCount && (
-	    <Link
-	      href={`/?page=${currentPage + 1}`}
-	      className="absolute right-0 transition-colors hover:text-pink-500"
-	    >
-	      next →
-	    </Link>
-	  )}
-	</div>
+          {currentPage < pageCount && (
+            <Link
+              href={`/?page=${currentPage + 1}`}
+              className="absolute right-0 transition-colors hover:text-pink-500"
+            >
+              next →
+            </Link>
+          )}
+        </div>
       )}
     </div>
   );
