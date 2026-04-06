@@ -39,8 +39,12 @@ export default async function Page({
     },
   });
 
-  // TODO: add deduplication
-  const flattened = comments.flatMap((comment) =>
+  const parentIds = new Set(
+    comments.map((comment) => comment.parentId).filter(Boolean),
+  );
+  const deduplicated = comments.filter((comment) => !parentIds.has(comment.id));
+
+  const flattened = deduplicated.flatMap((comment) =>
     comment.parent ? [comment, comment.parent] : comment,
   );
 
