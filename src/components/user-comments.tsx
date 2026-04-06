@@ -34,7 +34,7 @@ export default function UserComments({ comments }: Props) {
   return (
     <div>
       {commentTree.map((comment) => (
-	<UserComment key={comment.id} comment={comment} depth={0} />
+        <UserComment key={comment.id} comment={comment} depth={0} />
       ))}
     </div>
   );
