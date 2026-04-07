@@ -32,16 +32,16 @@ export default async function Page({
     include: {
       author: true,
       parent: {
-	include: {
-	  story: true,
-	  author: true,
-	},
+        include: {
+          story: true,
+          author: true,
+        },
       },
       story: {
-	select: {
-	  id: true,
-	  title: true,
-	},
+        select: {
+          id: true,
+          title: true,
+        },
       },
     },
   });
@@ -65,7 +65,7 @@ export default async function Page({
   return (
     <div>
       <h1>
-	comments submitted by <Link href={`/user/${username}`}>{username}</Link>
+        comments submitted by <Link href={`/user/${username}`}>{username}</Link>
       </h1>
 
       <UserComments comments={flattened} />

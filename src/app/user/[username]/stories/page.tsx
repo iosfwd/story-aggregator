@@ -32,9 +32,9 @@ export default async function Page({
     include: {
       author: true,
       _count: {
-	select: {
-	  comments: true,
-	},
+        select: {
+          comments: true,
+        },
       },
     },
   });
@@ -48,8 +48,9 @@ export default async function Page({
   return (
     <div>
       <h1>
-	stories submitted by <Link href={`/user/${username}`}>{username}</Link>
+        stories submitted by <Link href={`/user/${username}`}>{username}</Link>
       </h1>
+
       <Stories stories={stories} />
 
       <PaginationNavigation currentPage={currentPage} pageCount={pageCount} />
