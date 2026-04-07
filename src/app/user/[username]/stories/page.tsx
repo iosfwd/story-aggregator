@@ -32,23 +32,23 @@ export default async function Page({
     include: {
       author: true,
       _count: {
-        select: {
-          comments: true,
-        },
+	select: {
+	  comments: true,
+	},
       },
     },
   });
 
-  const commentCount = await prisma.story.count({
+  const storyCount = await prisma.story.count({
     where: { authorId: user.id },
   });
 
-  const pageCount = Math.ceil(commentCount / 30);
+  const pageCount = Math.ceil(storyCount / 30);
 
   return (
     <div>
       <h1>
-        stories submitted by <Link href={`/user/${username}`}>{username}</Link>
+	stories submitted by <Link href={`/user/${username}`}>{username}</Link>
       </h1>
 
       <Stories stories={stories} />
