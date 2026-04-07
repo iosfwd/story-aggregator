@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import Stories from "@/components/stories";
-import Link from "next/link";
 import PaginationNavigation from "@/components/pagination-navigation";
 
 export default async function Page({
@@ -19,9 +18,9 @@ export default async function Page({
     include: {
       author: true,
       _count: {
-	select: {
-	  comments: true,
-	},
+        select: {
+          comments: true,
+        },
       },
     },
   });
