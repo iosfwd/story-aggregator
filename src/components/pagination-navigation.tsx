@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
   currentPage: number;
@@ -9,13 +12,22 @@ export default function PaginationNavigation({
   currentPage,
   pageCount,
 }: Props) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const buildHref = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", String(page));
+    return `${pathname}?${params.toString()}`;
+  };
+
   return (
     <>
       {pageCount > 1 && (
         <div className="relative mt-6 flex items-center justify-center gap-4 font-mono text-sm text-stone-500">
           {currentPage > 1 && (
             <Link
-              href={`/?page=${currentPage - 1}`}
+              href={buildHref(currentPage - 1)}
               className="absolute left-0 transition-colors hover:text-pink-500"
             >
               ← prev
@@ -27,7 +39,7 @@ export default function PaginationNavigation({
 
           {currentPage < pageCount && (
             <Link
-              href={`/?page=${currentPage + 1}`}
+              href={buildHref(currentPage + 1)}
               className="absolute right-0 transition-colors hover:text-pink-500"
             >
               next →
