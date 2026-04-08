@@ -20,19 +20,29 @@ interface Comment {
   parentId: number | null;
 }
 
-export function buildCommentTree<Type extends Comment>(comments: Type[]) {
-    const map = new Map();
-  const topLevelComments = [];
+type WithChildren<T> = T & {
+  children: WithChildren<T>[];
+};
+
+export function buildCommentTree<Type extends Comment>(
+  comments: Type[],
+): WithChildren<Type>[] {
+  const map = new Map<number, WithChildren<Type>>();
 
   for (const comment of comments) {
     map.set(comment.id, { ...comment, children: [] });
   }
 
   for (const comment of comments) {
+    if (comment.parentId !== null) {
+      map.get(comment.parentId)?.children.push(map.get(comment.id)!);
+    }
+  }
+
+  const topLevelComments: WithChildren<Type>[] = [];
+  for (const comment of comments) {
     if (comment.parentId === null) {
-      topLevelComments.push(map.get(comment.id));
-    } else {
-      map.get(comment.parentId)?.children.push(map.get(comment.id));
+      topLevelComments.push(map.get(comment.id)!);
     }
   }
 

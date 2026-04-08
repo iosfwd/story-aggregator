@@ -30,11 +30,11 @@ export default async function Page({
     take: 30,
     skip: offset,
     include: {
-      author: true,
+      author: { select: { username: true } },
       parent: {
         include: {
           story: true,
-          author: true,
+          author: { select: { username: true } },
         },
       },
       story: {
@@ -57,15 +57,20 @@ export default async function Page({
 
   const pageCount = Math.ceil(commentCount / 30);
 
-  const parentIds = new Set(
-    comments.map((comment) => comment.parentId).filter(Boolean),
-  );
-
-  const deduplicated = comments.filter((comment) => !parentIds.has(comment.id));
-
-  const flattened = deduplicated.flatMap((comment) =>
+  const flattened = comments.flatMap((comment) =>
     comment.parent ? [comment, comment.parent] : comment,
   );
+
+  console.log(flattened);
+
+  const ids = new Set<number>();
+  const deduplicated = flattened.filter((comment) => {
+    if (ids.has(comment.id)) {
+      return false;
+    }
+    ids.add(comment.id);
+    return true;
+  });
 
   return (
     <div>
@@ -73,7 +78,7 @@ export default async function Page({
         comments submitted by <Link href={`/user/${username}`}>{username}</Link>
       </h1>
 
-      <UserComments comments={flattened} />
+      <UserComments comments={deduplicated} />
 
       <PaginationNavigation currentPage={currentPage} pageCount={pageCount} />
     </div>
