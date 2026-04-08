@@ -14,3 +14,27 @@ export function timeAgo(date: Date): string {
   const days = Math.floor(hours / 24);
   return `${days}d`;
 }
+
+interface Comment {
+  id: number;
+  parentId: number | null;
+}
+
+export function buildCommentTree<Type extends Comment>(comments: Type[]) {
+    const map = new Map();
+  const topLevelComments = [];
+
+  for (const comment of comments) {
+    map.set(comment.id, { ...comment, children: [] });
+  }
+
+  for (const comment of comments) {
+    if (comment.parentId === null) {
+      topLevelComments.push(map.get(comment.id));
+    } else {
+      map.get(comment.parentId)?.children.push(map.get(comment.id));
+    }
+  }
+
+  return topLevelComments;
+}
