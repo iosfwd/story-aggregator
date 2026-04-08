@@ -36,6 +36,7 @@ export async function loginUser(
 
   const user = await prisma.user.findUnique({
     where: { username },
+    select: { id: true, passwordHash: true },
   });
 
   if (!user) {

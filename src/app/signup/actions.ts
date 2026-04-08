@@ -36,7 +36,10 @@ export async function createUser(
 
   const { username, password } = result.data;
 
-  const existing = await prisma.user.findUnique({ where: { username } });
+  const existing = await prisma.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
   if (existing) {
     return { errors: { username: ["Username taken"] } };
   }

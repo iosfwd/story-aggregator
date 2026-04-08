@@ -18,37 +18,43 @@ export default async function Page({
 
   const user = await prisma.user.findUnique({
     where: { username: username },
+    select: { id: true },
   });
 
   if (!user) {
     notFound();
   }
 
-  const stories = await prisma.story.findMany({
+  const storiesPromise = prisma.story.findMany({
     where: { authorId: user.id },
     orderBy: { createdAt: "desc" },
     take: 30,
     skip: offset,
     include: {
-      author: true,
+      author: { select: { username: true } },
       _count: {
-	select: {
-	  comments: true,
-	},
+        select: {
+          comments: true,
+        },
       },
     },
   });
 
-  const storyCount = await prisma.story.count({
+  const storyCountPromise = await prisma.story.count({
     where: { authorId: user.id },
   });
+
+  const [stories, storyCount] = await Promise.all([
+    storiesPromise,
+    storyCountPromise,
+  ]);
 
   const pageCount = Math.ceil(storyCount / 30);
 
   return (
     <div>
       <h1>
-	stories submitted by <Link href={`/user/${username}`}>{username}</Link>
+        stories submitted by <Link href={`/user/${username}`}>{username}</Link>
       </h1>
 
       <Stories stories={stories} />

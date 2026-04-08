@@ -16,7 +16,7 @@ export default async function Page({
     take: 30,
     skip: offset,
     include: {
-      author: true,
+      author: { select: { username: true } },
       _count: {
         select: {
           comments: true,

@@ -3,7 +3,7 @@ import Story from "@/components/story";
 
 type StoryWithMeta = Prisma.StoryGetPayload<{
   include: {
-    author: true;
+    author: { select: { username: true } };
     _count: { select: { comments: true } };
   };
 }>;

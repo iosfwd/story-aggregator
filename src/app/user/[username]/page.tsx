@@ -12,7 +12,9 @@ export default async function Page({
 
   const user = await prisma.user.findUnique({
     where: { username: username },
-    include: {
+    select: {
+      username: true,
+      createdAt: true,
       _count: {
         select: { comments: true, stories: true },
       },

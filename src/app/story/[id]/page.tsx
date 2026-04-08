@@ -16,8 +16,11 @@ export default async function Page({
   const story = await prisma.story.findUnique({
     where: { id: storyId },
     include: {
-      author: true,
-      comments: { include: { author: true }, orderBy: { createdAt: "desc" } },
+      author: { select: { username: true } },
+      comments: {
+        include: { author: { select: { username: true } } },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 

@@ -2,7 +2,10 @@ import { Prisma } from "@/app/generated/prisma/client";
 import UserComment from "@/components/user-comment";
 
 type CommentWithStory = Prisma.CommentGetPayload<{
-  include: { story: { select: { id: true; title: true } }; author: true };
+  include: {
+    story: { select: { id: true; title: true } };
+    author: { select: { username: true } };
+  };
 }>;
 
 type Props = {

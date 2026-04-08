@@ -24,7 +24,7 @@ export default async function Page({
     notFound();
   }
 
-  const comments = await prisma.comment.findMany({
+  const commentsPromise = prisma.comment.findMany({
     where: { authorId: user.id },
     orderBy: { createdAt: "desc" },
     take: 30,
@@ -46,9 +46,14 @@ export default async function Page({
     },
   });
 
-  const commentCount = await prisma.comment.count({
+  const commentCountPromise = prisma.comment.count({
     where: { authorId: user.id },
   });
+
+  const [comments, commentCount] = await Promise.all([
+    commentsPromise,
+    commentCountPromise,
+  ]);
 
   const pageCount = Math.ceil(commentCount / 30);
 
