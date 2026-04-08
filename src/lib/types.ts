@@ -8,7 +8,7 @@ export type StoryWithMeta = Prisma.StoryGetPayload<{
 }>;
 
 export type CommentWithAuthor = Prisma.CommentGetPayload<{
-  include: { author: true };
+  include: { author: { select: { username: true } } };
 }>;
 
 export type CommentItem = CommentWithAuthor & {
