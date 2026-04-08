@@ -61,8 +61,6 @@ export default async function Page({
     comment.parent ? [comment, comment.parent] : comment,
   );
 
-  console.log(flattened);
-
   const ids = new Set<number>();
   const deduplicated = flattened.filter((comment) => {
     if (ids.has(comment.id)) {
