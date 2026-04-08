@@ -2,7 +2,7 @@
 
 import CommentForm from "@/components/comment-form";
 import Link from "next/link";
-import { CommentItem } from "@/lib/types";
+import type { CommentItem } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { useState } from "react";
 

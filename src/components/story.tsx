@@ -1,6 +1,6 @@
 import Link from "next/link";
 import VoteButtons from "@/components/vote-buttons";
-import { StoryWithMeta } from "@/lib/types";
+import type { StoryWithMeta } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 
 type Props = {

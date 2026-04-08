@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserCommentItem } from "@/lib/types";
+import type { UserCommentItem } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { useState } from "react";
 

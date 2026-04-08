@@ -1,5 +1,5 @@
 import Story from "@/components/story";
-import { StoryWithMeta } from "@/lib/types";
+import type { StoryWithMeta } from "@/lib/types";
 
 type Props = {
   stories: StoryWithMeta[];

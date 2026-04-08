@@ -1,5 +1,5 @@
 import UserComment from "@/components/user-comment";
-import { CommentWithStory } from "@/lib/types";
+import type { CommentWithStory } from "@/lib/types";
 import { buildCommentTree } from "@/lib/utils";
 
 type Props = {
@@ -12,7 +12,7 @@ export default function UserComments({ comments }: Props) {
   return (
     <div>
       {commentTree.map((comment) => (
-	<UserComment key={comment.id} comment={comment} depth={0} />
+        <UserComment key={comment.id} comment={comment} depth={0} />
       ))}
     </div>
   );
