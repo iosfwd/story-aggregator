@@ -1,12 +1,5 @@
-import { Prisma } from "@/app/generated/prisma/client";
 import Story from "@/components/story";
-
-type StoryWithMeta = Prisma.StoryGetPayload<{
-  include: {
-    author: { select: { username: true } };
-    _count: { select: { comments: true } };
-  };
-}>;
+import { StoryWithMeta } from "@/lib/types";
 
 type Props = {
   stories: StoryWithMeta[];

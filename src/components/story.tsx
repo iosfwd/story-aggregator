@@ -1,14 +1,7 @@
-import { Prisma } from "@/app/generated/prisma/client";
 import Link from "next/link";
-import { timeAgo } from "@/lib/utils";
 import VoteButtons from "@/components/vote-buttons";
-
-type StoryWithMeta = Prisma.StoryGetPayload<{
-  include: {
-    author: true;
-    _count: { select: { comments: true } };
-  };
-}>;
+import { StoryWithMeta } from "@/lib/types";
+import { timeAgo } from "@/lib/utils";
 
 type Props = {
   story: StoryWithMeta;

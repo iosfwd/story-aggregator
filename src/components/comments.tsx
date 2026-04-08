@@ -1,9 +1,5 @@
-import { Prisma } from "@/app/generated/prisma/client";
 import Comment from "@/components/comment";
-
-type CommentWithAuthor = Prisma.CommentGetPayload<{
-  include: { author: { select: { username: true } } };
-}>;
+import { CommentWithAuthor } from "@/lib/types";
 
 type Props = {
   comments: CommentWithAuthor[];

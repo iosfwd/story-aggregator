@@ -1,18 +1,10 @@
 "use client";
 
-import { Prisma } from "@/app/generated/prisma/client";
 import CommentForm from "@/components/comment-form";
-import { useState } from "react";
-import { timeAgo } from "@/lib/utils";
 import Link from "next/link";
-
-type CommentWithAuthor = Prisma.CommentGetPayload<{
-  include: { author: true };
-}>;
-
-type CommentItem = CommentWithAuthor & {
-  children: CommentItem[];
-};
+import { CommentItem } from "@/lib/types";
+import { timeAgo } from "@/lib/utils";
+import { useState } from "react";
 
 type Props = {
   comment: CommentItem;

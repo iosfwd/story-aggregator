@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { verifySession } from "@/lib/session";
 import LogoutButton from "@/components/logout-button";
 import { prisma } from "@/lib/prisma";
+import { verifySession } from "@/lib/session";
 
 export default async function Header() {
   const session = await verifySession().catch(() => null);
