@@ -1,17 +1,25 @@
 "use client";
-import { createComment, CommentFormState } from "@/app/story/actions";
-import { useActionState } from "react";
+import { createComment } from "@/app/story/actions";
+import type { CommentFormState } from "@/app/story/actions";
+import { useActionState, useEffect } from "react";
 
 type Props = {
   storyId: number;
   parentId: number | null;
+  onSuccess?: () => void;
 };
 
-export default function CommentForm({ storyId, parentId }: Props) {
+export default function CommentForm({ storyId, parentId, onSuccess }: Props) {
   const [state, action, pending] = useActionState<CommentFormState, FormData>(
     createComment,
     null,
   );
+
+  useEffect(() => {
+    if (state?.success) {
+      onSuccess?.();
+    }
+  }, [state?.success, onSuccess]);
 
   const isReply = parentId !== null;
 

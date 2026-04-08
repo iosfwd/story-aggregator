@@ -12,6 +12,7 @@ const commentSchema = z.object({
 });
 
 export type CommentFormState = {
+  success: boolean;
   errors?: {
     content?: string[];
   };
@@ -32,7 +33,7 @@ export async function createComment(
   });
 
   if (!result.success) {
-    return { errors: z.flattenError(result.error).fieldErrors };
+    return { success: false, errors: z.flattenError(result.error).fieldErrors };
   }
 
   await prisma.comment.create({
@@ -40,7 +41,7 @@ export async function createComment(
   });
 
   revalidatePath(`/story/${result.data.storyId}`);
-  return null;
+  return { success: true };
 }
 
 export async function upsertVote(storyId: number, value: 1 | -1) {

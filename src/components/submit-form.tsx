@@ -1,6 +1,7 @@
 "use client";
 
-import { createStory, StoryFormState } from "@/app/submit/actions";
+import { createStory } from "@/app/submit/actions";
+import type { StoryFormState } from "@/app/submit/actions";
 import { useActionState } from "react";
 
 export default function SubmitForm() {

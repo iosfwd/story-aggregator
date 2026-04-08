@@ -70,6 +70,7 @@ export default function Comment({ comment, depth }: Props) {
                   <CommentForm
                     storyId={comment.storyId}
                     parentId={comment.id}
+                    onSuccess={() => setShowReply(false)}
                   />
                 </div>
               )}
