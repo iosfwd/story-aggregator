@@ -1,6 +1,6 @@
 "use client";
 
-import { upsertVote } from "@/app/story/actions";
+import { upsertVote } from "@/app/story/[id]/actions";
 
 type Props = {
   storyId: number;

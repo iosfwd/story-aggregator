@@ -1,6 +1,7 @@
 "use client";
-import { createComment } from "@/app/story/actions";
-import type { CommentFormState } from "@/app/story/actions";
+
+import { createComment } from "@/app/story/[id]/actions";
+import type { CommentFormState } from "@/app/story/[id]/actions";
 import { useActionState, useEffect } from "react";
 
 type Props = {
