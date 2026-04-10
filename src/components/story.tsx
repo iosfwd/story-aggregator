@@ -5,12 +5,13 @@ import { timeAgo } from "@/lib/utils";
 
 type Props = {
   story: StoryWithMeta;
+  vote: 1 | -1 | null;
 };
 
-export default function Story({ story }: Props) {
+export default function Story({ story, vote }: Props) {
   return (
     <div className="group flex items-center gap-3 rounded px-1 py-2 hover:bg-stone-100">
-      <VoteButtons storyId={story.id} score={story.score} />
+      <VoteButtons storyId={story.id} score={story.score} initialVote={vote} />
 
       <div className="flex flex-col">
         <div className="flex flex-row items-center gap-1">

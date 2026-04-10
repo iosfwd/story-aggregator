@@ -43,7 +43,7 @@ export default function VoteButtons({ storyId, score, initialVote }: Props) {
 
       <div className="flex w-8 shrink-0 flex-col items-center gap-0.5">
         <button
-          className={`cursor-pointer leading-none transition-colors ${optimistic.vote === 1 ? "text-orange-500 hover:text-black " : "hover:text-orange-500"}`}
+          className={`cursor-pointer leading-none transition-colors ${optimistic.vote === 1 ? "text-orange-500 hover:text-black" : "hover:text-orange-500"}`}
           onClick={() => handleVote(1)}
         >
           ▲
