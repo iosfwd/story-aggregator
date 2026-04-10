@@ -5,6 +5,7 @@ import CommentForm from "@/components/comment-form";
 import VoteButtons from "@/components/vote-buttons";
 import { timeAgo } from "@/lib/utils";
 import Link from "next/link";
+import { verifySession } from "@/lib/session";
 
 export default async function Page({
   params,
@@ -28,10 +29,24 @@ export default async function Page({
     notFound();
   }
 
+  const { userId } = (await verifySession().catch(() => null)) ?? {
+    userId: null,
+  };
+
+  const existingVote = userId
+    ? await prisma.vote.findUnique({
+        where: { userId_storyId: { userId: Number(userId), storyId } },
+      })
+    : null;
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
       <div className="mb-6 flex items-start gap-3">
-        <VoteButtons storyId={storyId} score={story.score} />
+        <VoteButtons
+          storyId={storyId}
+          score={story.score}
+          initialVote={(existingVote?.value ?? null) as 1 | -1 | null}
+        />
 
         <div className="flex min-w-0 flex-col gap-0.5">
           <div className="flex flex-row items-baseline gap-1.5">
