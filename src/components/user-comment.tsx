@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { UserCommentItem } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { useState } from "react";
+import ExpandCollapseButton from "@/components/expand-collapse-button";
 
 type Props = {
   comment: UserCommentItem;
@@ -28,7 +29,7 @@ export default function UserComment({ comment, depth }: Props) {
       <div className="flex w-4 shrink-0 flex-col items-center">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className={`w-px flex-1 border-l-2 ${accentColor} mt-1 cursor-pointer opacity-40 transition-opacity hover:opacity-100`}
+          className={`w-px flex-1 border-l-2 ${accentColor} mt-1 cursor-pointer p-2 opacity-40 transition-opacity hover:opacity-100`}
           title={collapsed ? "Expand" : "Collapse"}
         />
       </div>
@@ -43,12 +44,10 @@ export default function UserComment({ comment, depth }: Props) {
             <Link href={`/story/${comment.storyId}`}>
               {comment.story.title}
             </Link>
-            <button
+            <ExpandCollapseButton
+              isCollapsed={collapsed}
               onClick={() => setCollapsed(!collapsed)}
-              className="ml-1 cursor-pointer text-stone-400 transition-colors hover:text-stone-600"
-            >
-              {collapsed ? "[+]" : "[–]"}
-            </button>
+            />
           </span>
         </div>
 

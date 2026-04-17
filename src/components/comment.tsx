@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { CommentItem } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { useState } from "react";
+import ExpandCollapseButton from "@/components/expand-collapse-button";
 
 type Props = {
   comment: CommentItem;
@@ -43,12 +44,10 @@ export default function Comment({ comment, depth }: Props) {
             </Link>{" "}
             {timeAgo(comment.createdAt)} ago
           </span>
-          <button
+          <ExpandCollapseButton
+            isCollapsed={collapsed}
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-1 cursor-pointer text-stone-400 transition-colors hover:text-stone-600"
-          >
-            {collapsed ? "[+]" : "[–]"}
-          </button>
+          />
         </div>
 
         {!collapsed && (
