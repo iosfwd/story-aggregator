@@ -5,6 +5,7 @@ import type { UserCommentItem } from "@/lib/types";
 import { timeAgo } from "@/lib/utils";
 import { useState } from "react";
 import ExpandCollapseButton from "@/components/expand-collapse-button";
+import ExpandCollapseBar from "@/components/expand-collapse-bar";
 
 type Props = {
   comment: UserCommentItem;
@@ -26,13 +27,11 @@ export default function UserComment({ comment, depth }: Props) {
 
   return (
     <div className="mt-0 flex flex-row gap-2 pl-0">
-      <div className="flex w-4 shrink-0 flex-col items-center">
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={`w-px flex-1 border-l-2 ${accentColor} mt-1 cursor-pointer p-2 opacity-40 transition-opacity hover:opacity-100`}
-          title={collapsed ? "Expand" : "Collapse"}
-        />
-      </div>
+      <ExpandCollapseBar
+        isCollapsed={collapsed}
+        onClick={() => setCollapsed(!collapsed)}
+        accentColor={accentColor}
+      />
 
       <div className="min-w-0 flex-1">
         <div className="font-mono text-xs text-stone-500">
