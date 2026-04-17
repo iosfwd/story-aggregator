@@ -80,4 +80,4 @@ export const verifySession = cache(async () => {
   }
 
   return { userId: payload.userId };
-})
+});
