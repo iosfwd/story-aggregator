@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
@@ -70,7 +71,7 @@ export async function deleteSession() {
   cookieStore.delete("session");
 }
 
-export async function verifySession() {
+export const verifySession = cache(async () => {
   const session = (await cookies()).get("session")?.value;
   const payload = await decrypt(session);
 
@@ -79,4 +80,4 @@ export async function verifySession() {
   }
 
   return { userId: payload.userId };
-}
+})
